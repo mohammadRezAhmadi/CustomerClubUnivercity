@@ -1,0 +1,43 @@
+.btn-login{
+    user-select: none;
+    color:#fff;
+    text-decoration: none;
+    background: #3482FF none repeat scroll 100% 0;
+    border: medium none;
+    border-radius: 20px;
+    color: var(--tg-white);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 28px 55px;
+    text-align: center;
+    text-transform: capitalize;
+    touch-action: manipulation;
+    transition: all 700ms ease 0s;
+}
+.btn-sign {
+    user-select: none;
+    text-decoration: none;
+    background: #ffffcc none repeat scroll 100% 0;
+    border: medium none;
+    border-radius: 20px;
+    color: var(--tg-white);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1;
+    margin-bottom: 0px;
+    padding: 28px 55px;
+    text-align: center;
+    text-transform: capitalize;
+    touch-action: manipulation;
+    transition: all 700ms ease 0s;
+    vertical-align: middle;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}

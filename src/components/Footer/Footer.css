@@ -1,0 +1,17 @@
+.text-footer{
+    color: #2a2a2c;
+}
+.img-footer{
+    display: flex;
+    justify-content: center;
+}
+.bottom-section-footer{
+    border-top: 1px solid #2a2a2c;
+    width: 80%;
+    padding: 30px 0;
+    margin: 50px auto 0;
+}
+.bottom-section-footer span{
+    color: #2a2a2c;
+    font-size: 14px;
+}
