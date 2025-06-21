@@ -4,6 +4,7 @@ import { getDatabase, ref, get, child, set, remove } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { onValue } from "firebase/database";
 import { FaTrash, FaEdit } from "react-icons/fa";
+import CreateChatModal from "../../components/Chat/CreateChatModal";
 import { Trash2 } from "lucide-react";
 
 const getAdminInfo = async (userId) => {
@@ -35,6 +36,7 @@ const DashboardAdmin = () => {
   const [description, setDescription] = useState("");
   const [pointsRequired, setPointsRequired] = useState("");
   const navigate = useNavigate();
+  const [showCreateChat, setShowCreateChat] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -183,7 +185,46 @@ const DashboardAdmin = () => {
               مدیریت دانشجویان
             </button>
           </div>
-
+          <div className="mt-4">
+            <button
+              onClick={() => setShowCreateChat(true)}
+              className="bg-blue-600 w-full py-2 rounded mb-4"
+            >
+              ایجاد چت گروهی
+            </button>
+          </div>
+          <div className="mt-0">
+            <button
+              onClick={() => navigate("/chat-requests")}
+              className="bg-blue-600 w-full py-2 rounded mb-4"
+            >
+              درخواست های چت
+            </button>
+          </div>
+          <div className="mt-0">
+            <button
+              onClick={() => navigate("/admin-chats")}
+              className="bg-blue-600 w-full py-2 rounded mb-4"
+            >
+              چت های من
+            </button>
+          </div>
+          <div className="mt-0">
+            <button
+              onClick={() => navigate("/create-contest")}
+              className="bg-violet-600 w-full py-2 rounded mb-4"
+            >
+              برگزاری مسابقه
+            </button>
+          </div>
+               <div className="mt-0">
+            <button
+              onClick={() => navigate("/CompetitionList")}
+              className="bg-violet-600 w-full py-2 rounded mb-4"
+            >
+              مسابقات
+            </button>
+          </div>
           <div className="mt-4">
             <button
               onClick={handleLogout}
@@ -195,6 +236,9 @@ const DashboardAdmin = () => {
         </div>
 
         {/* محتوای اصلی */}
+        {showCreateChat && (
+          <CreateChatModal onClose={() => setShowCreateChat(false)} />
+        )}
         <div className="w-full p-4 pl-16">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}

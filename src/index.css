@@ -1,23 +1,23 @@
 @font-face {
   font-family: 'iransanse';
-  src: url('../asset/IRANSansBold-Edit.ttf'),
+  src: url('../asset/IRANSans-Edit.ttf'),
 }
 
 *{
   direction: rtl;
-  font-family: 'iransanse';
+  font-family: 'iransanse', sans-serif;
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* background-color: #2A2A2A;   */
+  -moz-osx-font-smoothing: grayscale; */
+  /* background-color: #2A2A2A; */  
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */

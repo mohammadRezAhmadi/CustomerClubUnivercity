@@ -84,7 +84,7 @@ const StudentAccounts = () => {
 
   return (
     <div className="flex h-screen relative">
-      {/* سایدبار با انیمیشن و ارتفاع کامل */}
+      {/* سایدبار */}
       <div
         className={`fixed top-0 right-0 h-full bg-gray-800 text-white p-4 z-20 transition-all duration-300 ease-in-out ${
           sidebarOpen ? "w-64" : "w-0 -right-20 overflow-hidden"
@@ -103,15 +103,32 @@ const StudentAccounts = () => {
                 ×
               </button>
             </div>
+
             <p className="mb-2">نقش: دانشجو</p>
             <p className="mb-4">امتیاز: {studentData?.score || 0}</p>
+
             <button
               onClick={() => navigate("/myFestivales")}
               className="bg-blue-600 w-full py-2 rounded mb-4"
             >
               جشنواره‌های من
             </button>
+
+            {/* دکمه مدیریت چت‌های من */}
+            <button
+              onClick={() => navigate("/chatManager")}
+              className="bg-green-600 w-full py-2 rounded mb-4 hover:bg-green-700"
+            >
+              مدیریت چت‌های من
+            </button>
+            <button
+              onClick={() => navigate("/StudentCompetitionList")}
+              className="bg-green-600 w-full py-2 rounded mb-4 hover:bg-green-700"
+            >
+              مسابقات
+            </button>
           </div>
+
           <button
             onClick={handleLogout}
             className="bg-red-600 py-2 rounded w-full"
@@ -121,13 +138,12 @@ const StudentAccounts = () => {
         </div>
       </div>
 
-      {/* محتوای اصلی با فاصله از سایدبار */}
+      {/* محتوای اصلی */}
       <div
         className={`flex-1 p-6 transition-all duration-300 ease-in-out ${
           sidebarOpen ? "mr-64" : "mr-0"
         }`}
       >
-        {/* دکمه تاگل سایدبار */}
         <button
           className="bg-gray-700 text-white px-4 py-2 rounded mb-6"
           onClick={() => setSidebarOpen((prev) => !prev)}
