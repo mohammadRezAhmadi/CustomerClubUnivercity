@@ -31,7 +31,11 @@ const StudentCompetitionList = () => {
   }, [user]);
 
   const formatDate = (ts) => {
-    return new Date(ts).toLocaleDateString("fa-IR") + " - " + new Date(ts).toLocaleTimeString("fa-IR");
+    return (
+      new Date(ts).toLocaleDateString("fa-IR") +
+      " - " +
+      new Date(ts).toLocaleTimeString("fa-IR")
+    );
   };
 
   return (
@@ -66,7 +70,8 @@ const StudentCompetitionList = () => {
                   {comp.winnerLimitType === "unlimited"
                     ? "نامحدود"
                     : `${comp.maxWinners} نفر`}{" "}
-                  | برنده‌شدگان فعلی: <strong>{comp.winners?.length || 0}</strong>
+                  | برنده‌شدگان فعلی:{" "}
+                  <strong>{Object.keys(comp.winners || {}).length}</strong>
                 </div>
 
                 <div className="mt-4">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ref, set } from "firebase/database"; 
+import { ref, set , get } from "firebase/database"; 
 import { auth, db } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -23,49 +23,77 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("رمز عبور و تکرار آن یکسان نیستند!");
+  if (formData.password !== formData.confirmPassword) {
+    alert("رمز عبور و تکرار آن یکسان نیستند!");
+    setLoading(false);
+    return;
+  }
+
+  // اگر نقش دانشجو بود، بررسی کد دانشجویی
+  if (role === "student") {
+    const studentCode = formData.studentCode.trim();
+
+    // بررسی طول ۱۳ رقمی
+    if (!/^\d{13}$/.test(studentCode)) {
+      alert("کد دانشجویی باید دقیقاً ۱۳ رقم باشد.");
       setLoading(false);
       return;
     }
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
+    // بررسی تکراری نبودن در دیتابیس
+    const studentsRef = ref(db, "users");
+    const snapshot = await get(studentsRef);
+    const users = snapshot.val();
 
-      await set(ref(db, "users/" + user.uid), {
-        uid: user.uid,
-        role,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        score: 0, // شروع امتیاز از صفر
-        ...(role === "admin"
-          ? { personnelCode: formData.personnelCode }
-          : {
-              studentCode: formData.studentCode,
-              major: formData.major,
-            }),
-        createdAt: new Date().toISOString(),
-      });
+    const isDuplicate = Object.values(users || {}).some(
+      (u) => u.role === "student" && u.studentCode === studentCode
+    );
 
-      alert("ثبت‌نام با موفقیت انجام شد ✅");
-      navigate("/");
-    } catch (error) {
-      console.error("خطا در ثبت‌نام:", error);
-      alert(error.message);
-    } finally {
+    if (isDuplicate) {
+      alert("این کد دانشجویی قبلاً ثبت شده است.");
       setLoading(false);
+      return;
     }
-  };
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+    const user = userCredential.user;
+
+    await set(ref(db, "users/" + user.uid), {
+      uid: user.uid,
+      role,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      score: 0,
+      ...(role === "admin"
+        ? { personnelCode: formData.personnelCode }
+        : {
+            studentCode: formData.studentCode,
+            major: formData.major,
+          }),
+      createdAt: new Date().toISOString(),
+    });
+
+    alert("ثبت‌نام با موفقیت انجام شد ✅");
+    navigate("/");
+  } catch (error) {
+    console.error("خطا در ثبت‌نام:", error);
+    alert(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <form

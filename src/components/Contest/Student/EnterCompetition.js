@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  set,
-  get,
-  update,
-} from "firebase/database";
+import { getDatabase, ref, onValue, set, get, update } from "firebase/database";
 
 const EnterCompetition = () => {
   const { id } = useParams();
@@ -42,7 +35,11 @@ const EnterCompetition = () => {
     if (selected === null || status === "already") return;
 
     const isCorrect = selected === competition.correctIndex;
-    console.log( selected , competition.answers[selected] , competition.correctIndex)
+    console.log(
+      selected,
+      competition.answers[selected],
+      competition.correctIndex
+    );
     await set(ref(db, `competitionResults/${user.uid}/${id}`), {
       selected,
       isCorrect,
@@ -51,28 +48,29 @@ const EnterCompetition = () => {
 
     if (isCorrect) {
       // ثبت کاربر در لیست برنده‌ها
-      const winnersRef = ref(db, `competitions/${id}/winners`);
+      const winnersRef = ref(db, `contests/${id}/winners`);
       const snapshot = await get(winnersRef);
       const currentWinners = snapshot.val() || {};
       const currentCount = Object.keys(currentWinners).length;
 
-      const maxWinners = competition.winnerLimitType || Infinity;
+      const maxWinners =
+        competition.winnerLimitType === "limited"
+          ? parseInt(competition.maxWinners)
+          : Infinity;
 
       if (currentCount < maxWinners) {
-        await set(ref(db, `competitions/${id}/winners/${user.uid}`), {
+        await set(ref(db, `contests/${id}/winners/${user.uid}`), {
           uid: user.uid,
         });
 
         // گرفتن امتیاز فعلی دانشجو
         const userRef = ref(db, `users/${user.uid}`);
-        console.log(userRef)
         const userSnap = await get(userRef);
         const userData = userSnap.val() || {};
 
         const currentScore = userData.score || 0;
         const reward = competition.points || 0;
 
-        // اضافه کردن پاداش به امتیاز
         await update(userRef, {
           score: currentScore + reward,
         });
@@ -87,7 +85,9 @@ const EnterCompetition = () => {
   return (
     <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-lg">
       <h1 className="text-2xl font-bold mb-4 text-center">🎯 چیستان</h1>
-      <p className="mb-4 text-gray-700 text-center">سؤال: {competition.question}</p>
+      <p className="mb-4 text-gray-700 text-center">
+        سؤال: {competition.question}
+      </p>
 
       <div className="grid gap-3">
         {competition.answers.map((ans, idx) => (
@@ -97,7 +97,9 @@ const EnterCompetition = () => {
               selected === idx ? "bg-blue-600 text-white" : "hover:bg-blue-100"
             }`}
             onClick={() => setSelected(idx)}
-            disabled={status === "already" || status === "success" || status === "fail"}
+            disabled={
+              status === "already" || status === "success" || status === "fail"
+            }
           >
             {ans}
           </button>
@@ -121,10 +123,14 @@ const EnterCompetition = () => {
           </p>
         )}
         {status === "fail" && (
-          <p className="text-red-600 font-semibold">❌ متأسفانه پاسخ اشتباه بود.</p>
+          <p className="text-red-600 font-semibold">
+            ❌ متأسفانه پاسخ اشتباه بود.
+          </p>
         )}
         {status === "already" && (
-          <p className="text-yellow-600 font-semibold">⚠️ شما قبلاً در این مسابقه شرکت کرده‌اید.</p>
+          <p className="text-yellow-600 font-semibold">
+            ⚠️ شما قبلاً در این مسابقه شرکت کرده‌اید.
+          </p>
         )}
       </div>
     </div>

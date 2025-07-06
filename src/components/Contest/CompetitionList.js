@@ -67,7 +67,7 @@ const CompetitionList = () => {
                     : "نامشخص"}
                 </p>
                 <p className="text-gray-700 mb-1">
-                  تعداد برنده‌ها تا حالا: {comp.winners?.length || 0}
+                  تعداد برنده‌ها تا حالا: {Object.keys(comp.winners || {}).length}
                 </p>
                 <p className="text-gray-600 text-sm mb-3">
                   تاریخ برگزاری: {formatDate(comp.createdAt)}
